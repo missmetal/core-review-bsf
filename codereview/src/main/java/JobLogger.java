@@ -12,14 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JobLogger {
-    private static boolean logToFile;
-    private static boolean logToConsole;
-    private static boolean logMessage;
-    private static boolean logWarning;
-    private static boolean logError;
-    private static boolean logToDatabase;
-    private static Map dbParams;
-    private static Logger logger;
+    private boolean logToFile;
+    private boolean logToConsole;
+    private boolean logMessage;
+    private boolean logWarning;
+    private boolean logError;
+    private boolean logToDatabase;
+    private Map dbParams;
+    private Logger logger;
 
     public JobLogger(boolean logToFileParam, boolean logToConsoleParam, boolean logToDatabaseParam,
                      boolean logMessageParam, boolean logWarningParam, boolean logErrorParam, Map
@@ -34,10 +34,9 @@ public class JobLogger {
         dbParams = dbParamsMap;
     }
 
-    public static void LogMessage(String messageText, boolean message, boolean warning, boolean error)
+    public void LogMessage(String messageText, boolean message, boolean warning, boolean error)
             throws Exception {
         int idCaseLogging = 0;
-        String loggedMessage = "";
         File logFile = new File(dbParams.get("logFileFolder") + "/logFile.txt");
         Properties connectionProps = new Properties();
         Connection connection = DriverManager.getConnection("jdbc:" + dbParams.get("dbms") + "://" +
@@ -68,12 +67,12 @@ public class JobLogger {
             logFile.createNewFile();
 
         if (error && logError)
-            loggedMessage = "error " + DateFormat.getDateInstance(DateFormat.LONG).format(new Date()) + messageText;
+            logger.info("error " + DateFormat.getDateInstance(DateFormat.LONG).format(new Date()) + messageText);
         else if (warning && logWarning)
-            loggedMessage = "warning " + DateFormat.getDateInstance(DateFormat.LONG).format(new Date()) + messageText;
+            logger.warning("warning " + DateFormat.getDateInstance(DateFormat.LONG).format(new Date()) + messageText);
         else if (message && logMessage)
-            loggedMessage = "message " + DateFormat.getDateInstance(DateFormat.LONG).format(new Date()) +
-                    messageText;
+            logger.info("message " + DateFormat.getDateInstance(DateFormat.LONG).format(new Date()) +
+                    messageText);
 
         if (logToFile) {
             logger.addHandler(fh);

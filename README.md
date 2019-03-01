@@ -34,14 +34,22 @@ After that, the desing pattern that were about to be applied aren't clear too, t
 
 * Case 4: 
 
-`if (messageText == null || messageText.length() == 0) {
-return;
-}`
+    `if (messageText == null || messageText.length() == 0) {
+    return;
+    }`
 
-`/*Is redundant, message is never null or empty*/`
+    `/*Is redundant, message is never null or empty*/`
 
 * Case 5: All variables into a method should be created at the beggining of it
 
 * Case 6:
 
-`private boolean initialized; /*Is never used*/`
+    `private boolean initialized; /*Is never used*/`
+
+* Case 7: Unless in classes or methods that are unique and global for all the app or some singletons, it's not recommended to use static methods.
+
+* Case 8: For logging messages, is not recomended to use strings, only instancing the logger value is enough.
+
+    Don't use: `String loggedMessage;` 
+
+    Is recommended: `logger.info(message);`
